@@ -1,33 +1,7 @@
 <script lang="ts">
 	import DependencyGrid from '$lib/DependencyGrid.svelte';
-
-	interface Constraint {
-		version_constraint: string;
-	}
-
-	interface Dependency {
-		name: string;
-	}
-
-	type DependencyTuple = [Dependency, Constraint];
-
-	interface Package {
-		name: string;
-		status: string;
-		maintainer: string;
-		version: string;
-		description: string;
-		depends?: DependencyTuple[];
-		reverse_depends?: DependencyTuple[];
-		alts?: DependencyTuple[];
-		conflicts?: DependencyTuple[];
-		suggests?: string[];
-		priority?: string;
-		section?: string;
-		installed_size?: number;
-		architecture?: string;
-		homepage?: string;
-	}
+	import PackageMetadata from '$lib/PackageMetadata.svelte';
+	import type { Package } from '$lib/package';
 
 	export let details: Package;
 
@@ -39,11 +13,16 @@
 	<span class="ml-5 inline-flex items-center px-3 py-0.5 rounded-full text-lg font-medium bg-green-200 text-green-900">{details.version}</span>
 </div>
 <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
+	<!-- Package info -->
+	<PackageMetadata {details} />
+
+	<!-- DEPENDENCIES -->
 	<DependencyGrid title="Dependencies" dependencies={details.depends} />
-
 	<DependencyGrid title="Reverse Dependencies" dependencies={details.reverse_depends} />
+	<DependencyGrid title="Alternatives" dependencies={details.alts} />
 
-	<div class="py-4 rounded-lg border border-gray-300 bg-white shadow-sm px-10">
+	<!-- DESCRIPTION -->
+	<div class="py-4 rounded-lg border border-gray-300 bg-white shadow-sm px-10 max-w-xl">
 		<div class="my-5">
 			<h2 class="text-lg font-medium text-gray-800">Description</h2>
 

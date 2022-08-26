@@ -75,7 +75,7 @@ class Package(BaseModel):
             self.alts = alts
 
     @classmethod
-    def extract_packages_from_file(cls, filename: str) -> Iterable[Package]:
+    def extract_packages_from_file(cls, filename: str) -> List[Package]:
         """Extract packages from a file"""
         with open(filename) as f:
             packages = cls.extract_packages_from_lines(f.readlines())

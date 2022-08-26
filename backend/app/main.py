@@ -6,7 +6,7 @@ from fastapi import FastAPI
 from fastapi.exceptions import HTTPException
 
 from app.config import settings
-from app.model.package import Package
+from app.model.package import Dependency, Package
 
 app = FastAPI()
 packages: Dict[str, Package] = {}
@@ -36,8 +36,10 @@ async def startup():
                 continue
 
             for dep in other_package.depends:
-                if dep[0] == package.name:
-                    package.reverse_depends.append((other_package.name, dep[1]))  # NOTE: This is a reverse constraint
+                if dep[0].name == package.name:
+                    package.reverse_depends.append(
+                        (Dependency(name=other_package.name), dep[1])
+                    )  # NOTE: This is a reverse constraint
 
 
 @app.get("/all")
