@@ -1,8 +1,13 @@
 <script>
 	import '../app.css';
 	import SideBar from '$lib/SideBar.svelte';
+	import { onMount } from 'svelte';
+	import { goto } from '$app/navigation';
 
 	export let data;
+	onMount(() => {
+		goto(`/package/${data?.packages[0]}`);
+	});
 </script>
 
 <div>
