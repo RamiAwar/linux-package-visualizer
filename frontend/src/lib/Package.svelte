@@ -4,8 +4,6 @@
 	import type { Package } from '$lib/package';
 
 	export let details: Package;
-
-	console.log(details);
 </script>
 
 <div class="max-w-7xl mx-auto px-4 my-4 sm:px-6 md:px-8 flex">
