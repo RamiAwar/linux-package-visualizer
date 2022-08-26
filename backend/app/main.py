@@ -1,3 +1,4 @@
+import json
 from collections import defaultdict
 from typing import Dict, List
 
@@ -41,12 +42,12 @@ async def startup():
 
 @app.get("/all")
 async def get_all_packages():
-    return list(packages.keys())
+    return {"packages": list(packages.keys())}
 
 
 @app.get("/package/{package_name}")
 async def get_package(package_name: str):
     if packages.get(package_name):
-        return packages[package_name]
+        return packages[package_name].dict()
 
     return HTTPException(status_code=404, detail="Package not found")

@@ -52,22 +52,24 @@ class Package(BaseModel):
                 for i, dep in enumerate(depends):
                     constraint = None
                     first_parenthesis = dep.find("(")
-                    if first_parenthesis:
+                    if first_parenthesis != -1:
                         constraint = dep[first_parenthesis + 1 : dep.find(")")]
                         constraint = Constraint(version_constraint=constraint)
-
-                    depends[i] = (dep[:first_parenthesis].strip(), constraint)
+                        depends[i] = (Dependency(name=dep[:first_parenthesis].strip()), constraint)
+                    else:
+                        depends[i] = (Dependency(name=dep), constraint)
 
             # Not extracting this into a function since it will never be used anywhere else, not worth
             if alts:
                 for i, dep in enumerate(alts):
                     constraint = None
                     first_parenthesis = dep.find("(")
-                    if first_parenthesis:
+                    if first_parenthesis != -1:
                         constraint = dep[first_parenthesis + 1 : dep.find(")")]
                         constraint = Constraint(version_constraint=constraint)
-
-                    alts[i] = (dep[:first_parenthesis].strip(), constraint)
+                        alts[i] = (Dependency(name=dep[:first_parenthesis].strip()), constraint)
+                    else:
+                        alts[i] = (Dependency(name=dep), constraint)
 
             self.depends = depends
             self.alts = alts
