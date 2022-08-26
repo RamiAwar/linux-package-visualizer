@@ -30,6 +30,7 @@ class Package(BaseModel):
 
     # Union here is a hack to allow for strings to be written temporarily to deps/alts and get parsed later, saves some memory
     depends: Optional[Union[List[Tuple[Dependency, Constraint]], str]]
+    reverse_depends: Optional[List[Tuple[Dependency, Constraint]]] = Field(default=[])
     alts: Optional[Union[List[Tuple[Dependency, Constraint]], str]]
     conflicts: Optional[Union[List[Tuple[Dependency, Constraint]], str]]
     suggests: Optional[Union[List[str], str]]
@@ -75,7 +76,9 @@ class Package(BaseModel):
     def extract_packages_from_file(cls, filename: str) -> Iterable[Package]:
         """Extract packages from a file"""
         with open(filename) as f:
-            return cls.extract_packages_from_lines(f.readlines())
+            packages = cls.extract_packages_from_lines(f.readlines())
+
+        return packages
 
     @classmethod
     def extract_packages_from_lines(cls, lines: Iterable[str]) -> List[Package]:
@@ -106,3 +109,11 @@ class Package(BaseModel):
 
             description_parsing = key == "Description"
             current_package[key.lower()] = value.strip()
+
+        # Process last package if no new line at end of file
+        if current_package:
+            package = Package(**current_package)
+            package.parse_dependencies()
+            packages.append(package)
+
+        return packages
