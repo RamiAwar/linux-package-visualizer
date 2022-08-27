@@ -4,7 +4,7 @@ This is a demo application built with FastAPI and SvelteKit+TailwindCSS as part 
 
 Running the backend on a linux host will expose a package API that provides the following:
 - /all : Returns a list of all packages
-- /package/<name> : Returns details of a single package
+- /package/\<name\> : Returns details of a single package
 
 In the package details, you can find things like dependencies + constraints, as well as reverse dependencies and alternatives.
 
